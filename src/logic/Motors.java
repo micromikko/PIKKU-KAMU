@@ -94,12 +94,14 @@ public class Motors {
 		return "Turning left";
 	}
 
-	public String turnLeft(int degrees) {
+	public String turnLeft(int botDegrees) {
 		this.motorLeft.startSynchronization();
-		this.motorLeft.rotate(-degrees);
-		this.motorRight.rotate(degrees);
+		this.motorLeft.rotate(-Toolbox.distanceToDeg(Toolbox.botDegToDistance(botDegrees)));
+		this.motorRight.rotate(Toolbox.distanceToDeg(Toolbox.botDegToDistance(botDegrees)));
 		this.motorLeft.endSynchronization();
-		return "Left " + degrees + " degrees";
+		this.motorLeft.waitComplete();
+		this.motorRight.waitComplete();
+		return "Left " + botDegrees + " degrees";
 	}
 
 	public String turnRight() {
@@ -110,12 +112,14 @@ public class Motors {
 		return "Turning right";
 	}
 
-	public String turnRight(int degrees) {
+	public String turnRight(int botDegrees) {
 		this.motorLeft.startSynchronization();
-		this.motorLeft.rotate(degrees);
-		this.motorRight.rotate(-degrees);
+		this.motorLeft.rotate(Toolbox.distanceToDeg(Toolbox.botDegToDistance(botDegrees)));
+		this.motorRight.rotate(-Toolbox.distanceToDeg(Toolbox.botDegToDistance(botDegrees)));
 		this.motorLeft.endSynchronization();
-		return "Right " + degrees + " degrees";
+		this.motorLeft.waitComplete();
+		this.motorRight.waitComplete();
+		return "Right " + botDegrees + " degrees";
 	}
 	
 	public String stopMotors() {
