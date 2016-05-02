@@ -1,6 +1,6 @@
 package test;
 import logic.Motors;
-import logic.ColorSensorController;
+import logic.ColorChecker;
 import lejos.hardware.port.SensorPort;
 
 public class MoveStraightTest {
@@ -8,14 +8,23 @@ public class MoveStraightTest {
 	public static void main(String[] args) {
 		
 		Motors motors = new Motors();
-		ColorSensorController controller = new ColorSensorController(SensorPort.S3);
+		ColorChecker checker = new ColorChecker(SensorPort.S3);
 		
 		motors.driveForward();
+		checker.run();
+		
+		int lastCheckedColor = 1000;
+		int currentColor;
 		
 		while(true) {
-			if (controller.getCurrentColor() == 1) {
+			currentColor = checker.getCurrentColor();
+			if (currentColor == 1 && lastCheckedColor != currentColor) {
+				
 				motors.stopMotors();
-				break;
+				motors.turnLeft(180);
+				motors.driveForward();
+				lastCheckedColor = currentColor;
+				
 			}
 		}
 	}
