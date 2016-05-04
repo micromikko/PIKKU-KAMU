@@ -5,23 +5,27 @@ import lejos.hardware.lcd.LCD;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.utility.Delay;
 import logic.Motors;
+import modes.ManualControl;
 import support.Toolbox;
 //import ui.UI;
 
 
 public class IRSListenerTest extends Thread{
+	
 	private EV3IRSensor irSensor;
 	private Motors motors;
+	private ManualControl mc;
 	
 	private boolean isRunning = true;		// tracks if thread is still running
-	private int irCommand0;							// int that stores the pressed button on the IR controller
+	private int irCommand0;					// int that stores the pressed button on the IR controller
 	private int irCommand1;
 	private int irCommand2;
-	private int irCommand3;
+//	private int irCommand3;
 	
 	public IRSListenerTest(EV3IRSensor sensor) {
 	this.irSensor = sensor;
 	this.motors = new Motors();
+	this.mc = new ManualControl(this.motors);
 	}
 	
 	public void run() {
@@ -36,58 +40,13 @@ public class IRSListenerTest extends Thread{
 				kill();
 			}
 			
-			manualControl();
+			mc.manualControl(irCommand0, irSensor.getRemoteCommand(0));
 			treasureHunter();
 			treasureHunterTest();
 			
 		}	
 	}
 	
-	public void manualControl() {
-		
-		irCommand0 = irSensor.getRemoteCommand(0);			// stores the pressed IR controller button to irCommand (channel 4)
-		
-		switch(irCommand0) {
-		case 1:
-			// both backward
-			motors.setAcceleration(10000000);
-			while(irSensor.getRemoteCommand(0) != 0) {		// Both motors backward while button is pressed
-				motors.driveBackward();
-//				UI.bothBackward();							// prints issued command to screen
-			}
-			motors.stopMotors();							// stop all motors. same principle applies to all four controller buttons
-			break;
-		case 2:
-			// left, forward
-			motors.setAcceleration(10000000);
-			while (irSensor.getRemoteCommand(0) != 0) {
-				motors.turnRight();
-//				UI.leftForward();
-			}
-			motors.stopMotors();
-			break;
-		case 3:
-			// both forward
-			motors.setAcceleration(10000000);
-			while (irSensor.getRemoteCommand(0) != 0) {
-				motors.driveForward();
-//				UI.bothForward();
-			}
-			motors.stopMotors();
-			break;
-		case 4:
-			// right, forward
-			motors.setAcceleration(10000000);
-			while (irSensor.getRemoteCommand(0) != 0) {
-				motors.turnLeft();
-//				UI.rightForward();
-			}
-			motors.stopMotors();
-			break;
-		default:											// if no button is pressed the loop will start again
-			
-		}
-	}
 	
 	public void treasureHunter() {
 		
@@ -200,3 +159,54 @@ public class IRSListenerTest extends Thread{
 //9 CENTRE/BEACON
 //10 BOTTOM-LEFT + TOP-LEFT
 //11 TOP-RIGHT + BOTTOM-RIGHT
+
+
+
+/*
+
+public void manualControl() {
+	
+	irCommand0 = irSensor.getRemoteCommand(0);			// stores the pressed IR controller button to irCommand (channel 4)
+	
+	switch(irCommand0) {
+	case 1:
+		// both backward
+		motors.setAcceleration(10000000);
+		while(irSensor.getRemoteCommand(0) != 0) {		// Both motors backward while button is pressed
+			motors.driveBackward();
+//			UI.bothBackward();							// prints issued command to screen
+		}
+		motors.stopMotors();							// stop all motors. same principle applies to all four controller buttons
+		break;
+	case 2:
+		// left, forward
+		motors.setAcceleration(10000000);
+		while (irSensor.getRemoteCommand(0) != 0) {
+			motors.turnRight();
+//			UI.leftForward();
+		}
+		motors.stopMotors();
+		break;
+	case 3:
+		// both forward
+		motors.setAcceleration(10000000);
+		while (irSensor.getRemoteCommand(0) != 0) {
+			motors.driveForward();
+//			UI.bothForward();
+		}
+		motors.stopMotors();
+		break;
+	case 4:
+		// right, forward
+		motors.setAcceleration(10000000);
+		while (irSensor.getRemoteCommand(0) != 0) {
+			motors.turnLeft();
+//			UI.rightForward();
+		}
+		motors.stopMotors();
+		break;
+	default:											// if no button is pressed the loop will start again
+		
+	}
+}
+*/
