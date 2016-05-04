@@ -4,7 +4,7 @@
 package logic;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-//import lejos.hardware.motor.EV3MediumRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
 import support.Toolbox;
@@ -18,7 +18,7 @@ public class Motors {
 	
 	private RegulatedMotor motorLeft;
 	private RegulatedMotor motorRight;
-//	private RegulatedMotor motorColorSensor;
+	private EV3MediumRegulatedMotor motorColorSensorArm;
 //	private RegulatedMotor motorUndefined;
 	private RegulatedMotor[] motorSync = {this.motorRight};
 	
@@ -26,6 +26,7 @@ public class Motors {
 	public Motors() {
 		this.motorLeft = new EV3LargeRegulatedMotor(MotorPort.D);
 		this.motorRight = new EV3LargeRegulatedMotor(MotorPort.A);
+		this.motorColorSensorArm = new EV3MediumRegulatedMotor(MotorPort.B);
 //		this.motorColorSensor = new EV3MediumRegulatedMotor(MotorPort.B);
 //		this.motorUndefined = new EV3LargeRegulatedMotor(MotorPort.C);
 	}
@@ -33,6 +34,12 @@ public class Motors {
 //	public void motorSync(RegulatedMotor regMotor, RegulatedMotor[] motorSync) {
 //		regMotor.synchronizeWith(motorSync);
 //	}
+	
+	
+	
+	
+	//DRIVING RELATED STUFF
+	
 	
 	public void motorSync(RegulatedMotor regMotor, RegulatedMotor regMotor2) {
 		regMotor.synchronizeWith(new RegulatedMotor[] {regMotor2});
@@ -50,10 +57,11 @@ public class Motors {
 		return this.motorSync;
 	}
 	
-	public  void setAcceleration(int acceleration) {
+	public  void setDriveAcceleration(int acceleration) {
 		this.motorLeft.setAcceleration(acceleration);
 		this.motorRight.setAcceleration(acceleration);
 	}
+	
 	
 //	public void motorEndSync(RegulatedMotor regMotor) {
 //		regMotor.endSynchronization();
@@ -150,7 +158,30 @@ public class Motors {
 		this.motorLeft.endSynchronization();
 		return "All motors closed";
 	}
+	
+	//COLOR SENSOR ARM
+	
+	
+	
+	
+	public void setColorSensorArmAcceleration(int acceleration) {
+		this.motorColorSensorArm.setAcceleration(acceleration);
+	}
+	
+	public float getColorSensorArmPosition() {
+		return this.motorColorSensorArm.getPosition();
+	}
+	
+	public void turnColorSensorArm(int degrees) {
+		this.motorColorSensorArm.rotateTo(degrees);
+	}
 }
+
+
+
+
+
+
 
 // multithread motors? simultaneous rotary initiation necessary
 // for accurate and reliable navigation (no positioning beyond unreliable
