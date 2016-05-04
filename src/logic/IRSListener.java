@@ -19,9 +19,9 @@ public class IRSListener extends Thread{
 	private int irCommand2;
 	private int irCommand3;
 	
-	public IRSListener(EV3IRSensor sensor) {
+	public IRSListener(Motors motors, EV3IRSensor sensor) {
 	this.irSensor = sensor;
-	this.motors = new Motors();
+	this.motors = motors;
 	}
 	
 	public void run() {
