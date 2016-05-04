@@ -3,7 +3,6 @@
  */
 package support;
 
-import lejos.hardware.lcd.LCD;
 
 /**
  * @author micromikko
