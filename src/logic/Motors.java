@@ -166,14 +166,32 @@ public class Motors {
 	
 	public void setColorSensorArmAcceleration(int acceleration) {
 		this.motorColorSensorArm.setAcceleration(acceleration);
+		return;
 	}
 	
 	public float getColorSensorArmPosition() {
 		return this.motorColorSensorArm.getPosition();
 	}
 	
-	public void turnColorSensorArm(int degrees) {
+	public String turnColorSensorArm(int degrees) {
 		this.motorColorSensorArm.rotateTo(degrees);
+		this.motorColorSensorArm.waitComplete();
+		return "Color sensor arm turned" + degrees + "degrees";
+	}
+	
+	public String colorSensorArmDown() {
+		if(getColorSensorArmPosition() != 90) {
+			turnColorSensorArm(90);
+		}
+		return "Color sensor arm in reading position";
+		
+	}
+	
+	public String colorSensorArmUp() {
+		if(getColorSensorArmPosition() != -90) {
+			turnColorSensorArm(-90);
+		}
+		return "Color sensor arm up";
 	}
 }
 
