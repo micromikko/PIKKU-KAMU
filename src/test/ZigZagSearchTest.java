@@ -59,7 +59,7 @@ public class ZigZagSearchTest {
 				}
 				Delay.msDelay(500);
 				motors.driveForward(); //we are facing the right way, let's continue the search by
-									  //driving forwards	
+						       //driving forward
 			}
 			
 			if (colorChecker.getCurrentColor() == 5) {
@@ -70,12 +70,5 @@ public class ZigZagSearchTest {
 				
 			}
 		}
-		
-		
-		
-		
 	}
-	
-
-
 }
