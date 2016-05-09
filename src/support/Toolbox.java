@@ -15,6 +15,7 @@ public class Toolbox {
 //	public static final double WHEEL_RADIUS = (38 / 2);
 	public static int WHEEL_RADIUS = (374 / 2);
 	public static int BOT_RADIUS = (2600 / 2);
+	public static int BOT_WIDTH = 2100;
 //	public static final double BOT_RADIUS = (260 / 2);
 //	public static final double BOT_RADIUS = 110;
 	
