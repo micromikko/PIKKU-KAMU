@@ -7,6 +7,7 @@ import lejos.hardware.lcd.*;
 import logic.Motors;
 import logic.IRSListener;
 import logic.ColorChecker;
+import support.Toolbox;
 
 
 public class ZigZagSearchTest {
@@ -18,15 +19,20 @@ public class ZigZagSearchTest {
 	
 	
 	public ZigZagSearchTest() {
-		this.irsensor = new EV3IRSensor(SensorPort.S1);
+		//this.irsensor = new EV3IRSensor(SensorPort.S1);
 		this.motors = new Motors();
-		this.listener = new IRSListener(this.motors, this.irsensor);
-		this.colorChecker = new ColorChecker(SensorPort.S3);
+		//this.listener = new IRSListener(this.motors, this.irsensor);
+		this.colorChecker = new ColorChecker(SensorPort.S4);
 		
 	}
 	
 	public void doSearch() {
+		motors.setColorSensorArmSpeed(50);
 		motors.colorSensorArmDown();
+		LCD.drawString("" + colorChecker.getCurrentColor(), 1, 1);
+		Delay.msDelay(3000);
+		LCD.clear();
+		
 		motors.motorSync(motors.getMotorLeft(), motors.getMotorRight());
 		motors.setDriveAcceleration(50);
 		
@@ -38,32 +44,34 @@ public class ZigZagSearchTest {
 		
 		while(!foundTreasure) {
 			
-			if(colorChecker.getCurrentColor() == 1) {
+			if(colorChecker.getCurrentColor() == 7) {
 				//stop, we hit a border of the search area!
-				motors.stopMotors();
-				Delay.msDelay(500);
+				motors.stopDriveMotors();
+				LCD.drawString("BOINK",1,1);
+				Delay.msDelay(2000);
 				
 				if(collideCounter % 2 == 0) {
 					//check if we have to make a left or right turn
 					motors.turnRight(90);
 					Delay.msDelay(500);
-					motors.driveForward(10); //FIXME: adjust this distance according to the width of the device
+					motors.driveForward(Toolbox.BOT_WIDTH/2); //FIXME: adjust this distance according to the width of the device
 					Delay.msDelay(500);
 					motors.turnRight(90);
 				} else {
 					motors.turnLeft(90);
 					Delay.msDelay(500);
-					motors.driveForward(10); //FIXME: adjust this distance according to the width of the device
+					motors.driveForward(Toolbox.BOT_WIDTH/2); //FIXME: adjust this distance according to the width of the device
 					Delay.msDelay(500);
 					motors.turnLeft(90);
 				}
+				collideCounter++;
 				Delay.msDelay(500);
 				motors.driveForward(); //we are facing the right way, let's continue the search by
-						       //driving forward
+						       		   //driving forward
 			}
 			
-			if (colorChecker.getCurrentColor() == 5) {
-				motors.stopMotors();
+			if (colorChecker.getCurrentColor() == 0) {
+				motors.stopDriveMotors();
 				LCD.drawString("Found the treasure!", 1, 1);
 				Delay.msDelay(3000);
 				foundTreasure = true;
