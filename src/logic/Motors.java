@@ -84,7 +84,7 @@ public class Motors {
 		this.motorLeft.endSynchronization();
 		this.motorLeft.waitComplete();
 		this.motorRight.waitComplete();
-		stopMotors();
+		stopDriveMotors();
 		return "Driving " + distance + " cm";
 	}
 
@@ -103,7 +103,7 @@ public class Motors {
 		this.motorLeft.endSynchronization();
 		this.motorLeft.waitComplete();
 		this.motorRight.waitComplete();
-		stopMotors();
+		stopDriveMotors();
 		return "Driving " + distance + " cm";
 	}
 
@@ -122,7 +122,7 @@ public class Motors {
 		this.motorLeft.endSynchronization();
 		this.motorLeft.waitComplete();
 		this.motorRight.waitComplete();
-		stopMotors();
+		stopDriveMotors();
 		return "Left " + botDegrees + " degrees";
 	}
 
@@ -141,11 +141,11 @@ public class Motors {
 		this.motorLeft.endSynchronization();
 		this.motorLeft.waitComplete();
 		this.motorRight.waitComplete();
-		stopMotors();
+		stopDriveMotors();
 		return "Right " + botDegrees + " degrees";
 	}
 	
-	public String stopMotors() {
+	public String stopDriveMotors() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.stop();
 		this.motorRight.stop();
@@ -153,7 +153,7 @@ public class Motors {
 		return "Motors stopped";
 	}
 	
-	public String closeMotors() {
+	public String closeDriveMotors() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.close();
 		this.motorRight.close();
@@ -175,8 +175,8 @@ public class Motors {
 		this.motorColorSensorArm.setSpeed(speed);
 	}
 	
-	public float getColorSensorArmPosition() {
-		return this.motorColorSensorArm.getPosition();
+	public int getColorSensorArmPosition() {
+		return this.motorColorSensorArm.getTachoCount();
 	}
 //		return this.motorColorSensorArm.getTachoCount();
 	public String turnColorSensorArm(int degrees) {
@@ -186,18 +186,38 @@ public class Motors {
 	}
 	
 	public String colorSensorArmDown() {
-		if(getColorSensorArmPosition() != 90) {
-			turnColorSensorArm(90);
+		motorColorSensorArm.forward();
+		
+		while(!motorColorSensorArm.isStalled()) {
+			continue;
 		}
+		motorColorSensorArm.stop();
+		motorColorSensorArm.flt();
 		return "Color sensor arm in reading position";
 		
 	}
 	
 	public String colorSensorArmUp() {
-		if(getColorSensorArmPosition() != -90) {
-			turnColorSensorArm(-90);
+		motorColorSensorArm.backward();
+		
+		while(!motorColorSensorArm.isStalled()) {
+			continue;
 		}
+		motorColorSensorArm.stop();
+		motorColorSensorArm.flt();
+		
 		return "Color sensor arm up";
+		
+	}
+	
+	public String stopColorSensorArmMotor() {
+		this.motorColorSensorArm.stop();
+		return "Color sensor arm motor stopped";
+	}
+	
+	public String closeColorSensorArmMotor() {
+		this.motorColorSensorArm.close();
+		return "Color sensor arm motor closed";
 	}
 }
 
