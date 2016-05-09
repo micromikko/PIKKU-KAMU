@@ -1,58 +1,138 @@
 package logic;
 
-import lejos.hardware.Button;
-import lejos.hardware.lcd.LCD;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.utility.Delay;
-import logic.Motors;
-import support.Toolbox;
-//import ui.UI;
-
 
 public class IRSListener extends Thread{
 	private EV3IRSensor irSensor;
-	private Motors motors;
+	private boolean isRunning;
 	
-	private boolean isRunning = true;		// tracks if thread is still running
-	private int irCommand0;							// int that stores the pressed button on the IR controller
-	private int irCommand1;
-	private int irCommand2;
-	private int irCommand3;
+	// variables to store commands from each IR channel
+	private int remoteCommand0;
+	private int remoteCommand1;
+	private int remoteCommand2;
+	private int remoteCommand3;
 	
-	public IRSListener(Motors motors, EV3IRSensor sensor) {
+	public IRSListener(EV3IRSensor sensor) {
 	this.irSensor = sensor;
-	this.motors = motors;
+	this.isRunning = true;
 	}
-	
-	public void run() {
-		
-		this.motors.motorSync(this.motors.getMotorLeft(), this.motors.getMotorRight());
-		this.motors.setDriveAcceleration(50);
-		
-		while(isRunning) {
-			
-			if(Button.ESCAPE.isDown()) {						// thread will be killed if ESC is pressed on EV3
-				motors.closeMotors();							// close motors when thread is killed
-				kill();
-			}
-			
-			
-		}	
-	}
-
 	
 	/**
-	 * Kills the thread listening to IR controller traffic
+	 * IRSListener listens to all IR channels and stores their values
 	 */
+	public void run() {
+		while(this.isRunning) {
+			listenChannel0();
+			listenChannel1();
+			listenChannel2();
+			listenChannel3();			
+		}
+	}
+	
+	/**
+	 * Listens to channel 0 (remote channel 1)
+	 */
+	public void listenChannel0() {
+//		this.remoteCommand0 = this.irSensor.getRemoteCommand(0);
+		checkForTwoButtonCommands(0);
+	}
+
+	/**
+	 * Listens to channel 1 (remote channel 2)
+	 */
+	public void listenChannel1() {
+//		this.remoteCommand1 = this.irSensor.getRemoteCommand(1);
+		checkForTwoButtonCommands(1);
+	}
+	
+	/**
+	 * Listens to channel 2 (remote channel 3)
+	 */
+	public void listenChannel2() {
+//		this.remoteCommand2 = this.irSensor.getRemoteCommand(2);
+		checkForTwoButtonCommands(2);
+	}
+	
+	/**
+	 * Listens to channel 3 (remote channel 4)
+	 */
+	public void listenChannel3() {
+//		this.remoteCommand3 = this.irSensor.getRemoteCommand(3);
+		checkForTwoButtonCommands(3);
+	}
+	
+	/**
+	 * @return the remoteCommand0
+	 */
+	public int getRemoteCommand0() {
+		return remoteCommand0;
+	}
+
+	/**
+	 * @return the remoteCommand1
+	 */
+	public int getRemoteCommand1() {
+		return remoteCommand1;
+	}
+
+	/**
+	 * @return the remoteCommand2
+	 */
+	public int getRemoteCommand2() {
+		return remoteCommand2;
+	}
+
+	/**
+	 * @return the remoteCommand3
+	 */
+	public int getRemoteCommand3() {
+		return remoteCommand3;
+	}
+
 	public void kill() {
 		this.isRunning = false;
-//		LCD.clear();
-//		LCD.drawString("Listener killed.", 1, 3);
+	}
+	
+	public int checkForTwoButtonCommands(int channel) {
+		
+//		int buttonStillDown;
+		int oneButtonCommand = this.irSensor.getRemoteCommand(channel);
+		
+//		if(channel >= 0) {
+			if(oneButtonCommand != 0) {
+				Delay.msDelay(200);
+				int twoButtonCommand = this.irSensor.getRemoteCommand(channel);
+				
+				if(twoButtonCommand != oneButtonCommand) {
+					return twoButtonCommand;
+				} else {
+					return oneButtonCommand;
+				}
+			} else {
+				return 0;
+			}
+//		} else {
+//			if(oneButtonCommand != 0) {
+//				Delay.msDelay(200);
+//				int twoButtonCommand = this.irSensor.getRemoteCommand(channel);
+//				
+//				if(twoButtonCommand != oneButtonCommand) {
+//					return twoButtonCommand;
+//				} else {
+//					while(true) {
+//						buttonStillDown = this.irSensor.getRemoteCommand(0);
+//						if(!(oneButtonCommand == buttonStillDown)) {
+//							break;
+//						}
+//					}
+//				}
+//			}
+//		}
+		
+//		return -1;
 	}
 }
-
-
-
 
 //1 TOP-LEFT
 //2 BOTTOM-LEFT
