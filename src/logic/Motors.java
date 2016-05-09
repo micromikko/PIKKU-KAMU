@@ -63,6 +63,8 @@ public class Motors {
 	}
 	
 	
+	
+	
 //	public void motorEndSync(RegulatedMotor regMotor) {
 //		regMotor.endSynchronization();
 //	}
@@ -169,10 +171,14 @@ public class Motors {
 		return;
 	}
 	
+	public void setColorSensorArmSpeed(int speed) {
+		this.motorColorSensorArm.setSpeed(speed);
+	}
+	
 	public float getColorSensorArmPosition() {
 		return this.motorColorSensorArm.getPosition();
 	}
-	
+//		return this.motorColorSensorArm.getTachoCount();
 	public String turnColorSensorArm(int degrees) {
 		this.motorColorSensorArm.rotateTo(degrees);
 		this.motorColorSensorArm.waitComplete();

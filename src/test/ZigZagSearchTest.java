@@ -57,7 +57,6 @@ public class ZigZagSearchTest {
 					Delay.msDelay(500);
 					motors.turnLeft(90);
 				}
-				collideCounter++;
 				Delay.msDelay(500);
 				motors.driveForward(); //we are facing the right way, let's continue the search by
 						       //driving forward
