@@ -1,9 +1,10 @@
-package music;
+package modes;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.utility.Delay;
+import logic.MusicController;
 
 public class Jukebox {
 	private EV3IRSensor irSensor;

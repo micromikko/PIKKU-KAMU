@@ -1,17 +1,25 @@
 package modes;
 
+import logic.ColorSensorArm;
 import logic.IRSListener;
 import logic.Motors;
 
+/**
+ * 
+ * @author micromikko
+ *
+ */
 public class ManualControl {
-	
-	private Motors motors;
+
 	private IRSListener irsl;
+	private Motors motors;
+	private ColorSensorArm csa;
 	private boolean armDown = false;
 	
-	public ManualControl(IRSListener irsl, Motors importedMotors) {
-		this.motors = importedMotors;
+	public ManualControl(IRSListener irsl, Motors importedMotors, ColorSensorArm csa) {
 		this.irsl = irsl;
+		this.motors = importedMotors;
+		this.csa = csa;
 	}
 	
 	public void manualControl() {
@@ -38,10 +46,10 @@ public class ManualControl {
 			case 3:
 				// both backward
 				this.motors.setDriveAcceleration(10000000);
-				while(this.irsl.checkForTwoButtonCommands(0) != 0) {		// Both motors backward while button is pressed
+				while(this.irsl.checkForTwoButtonCommands(0) != 0) {
 					this.motors.driveBackward();
 				}
-				this.motors.stopDriveMotors();							// stop all motors. same principle applies to all four controller buttons
+				this.motors.stopDriveMotors();
 				break;
 			case 4:
 				// right, forward
@@ -52,18 +60,18 @@ public class ManualControl {
 				this.motors.stopDriveMotors();
 				break;
 			case 8:
-				// arm down
+				// toggle arm up/down
 				armToggle();
-			default:											// if no button is pressed the loop will start again
+			default:
 		}
 	}
 	
 	public void armToggle() {
 		if(!this.armDown) {
-			this.motors.colorSensorArmDown();
+			this.csa.colorSensorArmDown();
 			this.armDown = true;
 		} else {
-			this.motors.colorSensorArmUp();
+			this.csa.colorSensorArmUp();
 			this.armDown = false;
 		}
 	}

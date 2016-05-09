@@ -4,7 +4,6 @@
 package logic;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
 import support.Toolbox;
@@ -18,57 +17,60 @@ public class Motors {
 	
 	private RegulatedMotor motorLeft;
 	private RegulatedMotor motorRight;
-	private EV3MediumRegulatedMotor motorColorSensorArm;
-//	private RegulatedMotor motorUndefined;
 	private RegulatedMotor[] motorSync = {this.motorRight};
 	
 	
 	public Motors() {
 		this.motorLeft = new EV3LargeRegulatedMotor(MotorPort.D);
 		this.motorRight = new EV3LargeRegulatedMotor(MotorPort.A);
-		this.motorColorSensorArm = new EV3MediumRegulatedMotor(MotorPort.B);
-//		this.motorColorSensor = new EV3MediumRegulatedMotor(MotorPort.B);
-//		this.motorUndefined = new EV3LargeRegulatedMotor(MotorPort.C);
 	}
 	
-//	public void motorSync(RegulatedMotor regMotor, RegulatedMotor[] motorSync) {
-//		regMotor.synchronizeWith(motorSync);
-//	}
-	
-	
-	
-	
-	//DRIVING RELATED STUFF
-	
-	
+	/**
+	 * Used to sync the two drive motors
+	 * @param regMotor Left motor
+	 * @param regMotor2 Right motor
+	 */
 	public void motorSync(RegulatedMotor regMotor, RegulatedMotor regMotor2) {
 		regMotor.synchronizeWith(new RegulatedMotor[] {regMotor2});
 	}
 	
+	/**
+	 * Get motorLeft
+	 * @return RegulatedMotor Returns the left motor
+	 */
 	public RegulatedMotor getMotorLeft() {
 		return this.motorLeft;
 	}
 	
+	/**
+	 * Get motorRight
+	 * @return RegulatedMotor Returns the right motor
+	 */
 	public RegulatedMotor getMotorRight() {
 		return this.motorRight;
 	}
 	
+	/**
+	 * Gets the array of motors to sync
+	 * @return Returns an array of RegulatedMotors
+	 */
 	public RegulatedMotor[] getMotorSync() {
 		return this.motorSync;
 	}
 	
+	/**
+	 * Set the acceleration of the drive motors
+	 * @param acceleration Acceleration measured in degrees/second/second (deg/s^2)
+	 */
 	public  void setDriveAcceleration(int acceleration) {
 		this.motorLeft.setAcceleration(acceleration);
 		this.motorRight.setAcceleration(acceleration);
 	}
-	
-	
-	
-	
-//	public void motorEndSync(RegulatedMotor regMotor) {
-//		regMotor.endSynchronization();
-//	}
 
+	/**
+	 * Synchronously drives forward with both drive motors until stopped
+	 * @return String "Driving forward"
+	 */
 	public String driveForward() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.forward();
@@ -77,6 +79,11 @@ public class Motors {
 		return "Driving forward";
 	}
 
+	/**
+	 * Synchronously drives forward (*distance* / 10000) metres
+	 * @param distance int Distance measured in 0.1 millimetres
+	 * @return String "Driving *distance*"
+	 */
 	public String driveForward(int distance) {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.rotate(Toolbox.distanceToDeg(distance), true);
@@ -85,9 +92,13 @@ public class Motors {
 		this.motorLeft.waitComplete();
 		this.motorRight.waitComplete();
 		stopDriveMotors();
-		return "Driving " + distance + " cm";
+		return "Driving " + distance;
 	}
 
+	/**
+	 * Synchronously drives backward with both drive motors until stopped
+	 * @return String "Driving backward"
+	 */
 	public String driveBackward() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.backward();
@@ -96,6 +107,11 @@ public class Motors {
 		return "Driving backward";
 	}
 
+	/**
+	 * Synchronously drives backward (*distance* / 10000) metres
+	 * @param distance int Distance measured in 0.1 metres
+	 * @return String "Driving *distance*"
+	 */
 	public String driveBackward(int distance) {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.rotate(-(Toolbox.distanceToDeg(distance)), true);
@@ -104,9 +120,13 @@ public class Motors {
 		this.motorLeft.waitComplete();
 		this.motorRight.waitComplete();
 		stopDriveMotors();
-		return "Driving " + distance + " cm";
+		return "Driving " + distance;
 	}
 
+	/**
+	 * Turns left. Reverses left motor and forwards right motor synchronously until stopped
+	 * @return String "Turning left"
+	 */
 	public String turnLeft() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.backward();
@@ -115,6 +135,11 @@ public class Motors {
 		return "Turning left";
 	}
 
+	/**
+	 * Turns the bot left *botDegrees*
+	 * @param botDegrees int botDegrees is the amount of degrees you want the bot to turn in the real world
+	 * @return String "Left *botDegrees* degrees"
+	 */
 	public String turnLeft(int botDegrees) {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.rotate(-(Toolbox.distanceToDeg(Toolbox.botDegToDistance(botDegrees))), true);
@@ -126,6 +151,10 @@ public class Motors {
 		return "Left " + botDegrees + " degrees";
 	}
 
+	/**
+	 * Turns left. Reverses right motor and forwards left motor synchronously until stopped
+	 * @return "Turning right"
+	 */
 	public String turnRight() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.forward();
@@ -134,6 +163,11 @@ public class Motors {
 		return "Turning right";
 	}
 
+	/**
+	 * Turns the bot right *botDegrees*
+	 * @param botDegrees int botDegrees is the amount of degrees you want the bot to turn in the real world
+	 * @return String "Right *botDegrees* degrees"
+	 */
 	public String turnRight(int botDegrees) {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.rotate(Toolbox.distanceToDeg(Toolbox.botDegToDistance(botDegrees)), true);
@@ -145,6 +179,10 @@ public class Motors {
 		return "Right " + botDegrees + " degrees";
 	}
 	
+	/**
+	 * Stops both drive motors synchronously
+	 * @return String "Motors stopped"
+	 */
 	public String stopDriveMotors() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.stop();
@@ -153,93 +191,15 @@ public class Motors {
 		return "Motors stopped";
 	}
 	
+	/**
+	 * Closes both drive motors synchronously
+	 * @return String "Motors closed"
+	 */
 	public String closeDriveMotors() {
 		this.motorLeft.startSynchronization();
 		this.motorLeft.close();
 		this.motorRight.close();
 		this.motorLeft.endSynchronization();
-		return "All motors closed";
-	}
-	
-	//COLOR SENSOR ARM
-	
-	
-	
-	
-	public void setColorSensorArmAcceleration(int acceleration) {
-		this.motorColorSensorArm.setAcceleration(acceleration);
-		return;
-	}
-	
-	public void setColorSensorArmSpeed(int speed) {
-		this.motorColorSensorArm.setSpeed(speed);
-	}
-	
-	public int getColorSensorArmPosition() {
-		return this.motorColorSensorArm.getTachoCount();
-	}
-//		return this.motorColorSensorArm.getTachoCount();
-	public String turnColorSensorArm(int degrees) {
-		this.motorColorSensorArm.rotateTo(degrees);
-		this.motorColorSensorArm.waitComplete();
-		return "Color sensor arm turned" + degrees + "degrees";
-	}
-	
-	public String colorSensorArmDown() {
-		motorColorSensorArm.forward();
-		
-		while(!motorColorSensorArm.isStalled()) {
-			continue;
-		}
-		motorColorSensorArm.stop();
-		motorColorSensorArm.flt();
-		return "Color sensor arm in reading position";
-		
-	}
-	
-	public String colorSensorArmUp() {
-		motorColorSensorArm.backward();
-		
-		while(!motorColorSensorArm.isStalled()) {
-			continue;
-		}
-		motorColorSensorArm.stop();
-		motorColorSensorArm.flt();
-		
-		return "Color sensor arm up";
-		
-	}
-	
-	public String stopColorSensorArmMotor() {
-		this.motorColorSensorArm.stop();
-		return "Color sensor arm motor stopped";
-	}
-	
-	public String closeColorSensorArmMotor() {
-		this.motorColorSensorArm.close();
-		return "Color sensor arm motor closed";
+		return "Motors closed";
 	}
 }
-
-
-
-
-
-
-
-// multithread motors? simultaneous rotary initiation necessary
-// for accurate and reliable navigation (no positioning beyond unreliable
-// IR distance/bearing tracker)
-
-// getMaxSpeed()
-// based on current voltage
-
-// void synchronizeWith(RegulatedMotor[] syncList)
-// set sync list
-// links motorLeft and motorRight together for synchronous initiation
-
-// void startSynchronization()
-// begin set of synchronized motor operations
-
-// void endSynchronization()
-// complete a set of synchronized motor operations

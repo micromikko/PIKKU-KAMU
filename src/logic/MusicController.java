@@ -1,15 +1,13 @@
-package music;
+package logic;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import lejos.hardware.Button;
-import lejos.hardware.Audio;
-import lejos.hardware.Sound;
+
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.sensor.EV3IRSensor;
-import lejos.utility.Delay;
+
 
 public class MusicController extends Thread {
 	final File soundFile1 = new File("Space_Alert3.wav");
