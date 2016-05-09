@@ -16,12 +16,21 @@ public class ManualControl {
 	private ColorSensorArm csa;
 	private boolean armDown = false;
 	
+	/**
+	 * Constructor
+	 * @param irsl
+	 * @param importedMotors
+	 * @param csa
+	 */
 	public ManualControl(IRSListener irsl, Motors importedMotors, ColorSensorArm csa) {
 		this.irsl = irsl;
 		this.motors = importedMotors;
 		this.csa = csa;
 	}
 	
+	/**
+	 * Governs the robot's actions when using the IR remote in channel 1
+	 */
 	public void manualControl() {
 		
 		int remoteCommand = this.irsl.checkForTwoButtonCommands(0);
@@ -66,6 +75,9 @@ public class ManualControl {
 		}
 	}
 	
+	/**
+	 * For testing purposes. Used to test button delay.
+	 */
 	public void armToggle() {
 		if(!this.armDown) {
 			this.csa.colorSensorArmDown();

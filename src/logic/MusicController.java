@@ -10,6 +10,7 @@ import lejos.hardware.sensor.EV3IRSensor;
 
 
 public class MusicController extends Thread {
+	
 	final File soundFile1 = new File("Space_Alert3.wav");
 	final File soundFile2 = new File("laaseri.wav");
 	final File soundFile3 = new File("Space_Alert2.wav");
@@ -21,6 +22,9 @@ public class MusicController extends Thread {
 	private ArrayList<File> playList = new ArrayList<>();
 	Map<File, String> map = new HashMap<File, String>();
 	
+	/**
+	 * Constructor
+	 */
 	public MusicController () {
 		soundNumber = 0;
 		volume = 50;

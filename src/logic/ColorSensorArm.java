@@ -11,7 +11,9 @@ public class ColorSensorArm {
 	
 	private EV3MediumRegulatedMotor motorColorSensorArm;
 
-	
+	/**
+	 * Contructor
+	 */
 	public ColorSensorArm() {
 		this.motorColorSensorArm = new EV3MediumRegulatedMotor(MotorPort.B);
 	}

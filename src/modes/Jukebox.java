@@ -10,6 +10,11 @@ public class Jukebox {
 	private EV3IRSensor irSensor;
 	private MusicController jukebox;
 	
+	/**
+	 * Constructor
+	 * @param importedJukebox
+	 * @param irSensor
+	 */
 	public Jukebox(MusicController importedJukebox, EV3IRSensor irSensor){
 		this.jukebox = importedJukebox;
 		this.irSensor = irSensor;

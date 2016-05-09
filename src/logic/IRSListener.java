@@ -18,13 +18,17 @@ public class IRSListener extends Thread{
 	private int remoteCommand2;
 	private int remoteCommand3;
 	
+	/**
+	 * Constructor
+	 * @param sensor EV3IRSensor Which sensor should the listener be attached to
+	 */
 	public IRSListener(EV3IRSensor sensor) {
 	this.irSensor = sensor;
 	this.isRunning = true;
 	}
 	
 	/**
-	 * IRSListener listens to all IR channels and stores their values
+	 * IRSListener creates a thread that listens to all IR channels and stores their values
 	 */
 	public void run() {
 		while(this.isRunning) {
@@ -91,10 +95,18 @@ public class IRSListener extends Thread{
 		return remoteCommand3;
 	}
 
+	/**
+	 * Kill the thread
+	 */
 	public void kill() {
 		this.isRunning = false;
 	}
 	
+	/**
+	 * Checks if two buttons are pressed at the same time with a 200ms leeway
+	 * @param channel int An integerr that corresponds to the channel to be read
+	 * @return int Returns an integer that corresponds to a certain button combination on the IR remote
+	 */
 	public int checkForTwoButtonCommands(int channel) {
 		
 //		int buttonStillDown;

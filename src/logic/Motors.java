@@ -19,7 +19,9 @@ public class Motors {
 	private RegulatedMotor motorRight;
 	private RegulatedMotor[] motorSync = {this.motorRight};
 	
-	
+	/**
+	 * Constructor
+	 */
 	public Motors() {
 		this.motorLeft = new EV3LargeRegulatedMotor(MotorPort.D);
 		this.motorRight = new EV3LargeRegulatedMotor(MotorPort.A);
@@ -30,6 +32,7 @@ public class Motors {
 	 * @param regMotor Left motor
 	 * @param regMotor2 Right motor
 	 */
+	
 	public void motorSync(RegulatedMotor regMotor, RegulatedMotor regMotor2) {
 		regMotor.synchronizeWith(new RegulatedMotor[] {regMotor2});
 	}
