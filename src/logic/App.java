@@ -7,29 +7,36 @@ import lejos.hardware.sensor.EV3IRSensor;
 import lejos.utility.Delay;
 import modes.ManualControl;
 
+/**
+ * 
+ * @author micromikko
+ *
+ */
 public class App {
 	
-	// lower level classes
-	
-	// ir sensor and listener
 	private EV3IRSensor irSensor = new EV3IRSensor(SensorPort.S1);
 	private IRSListener irsl = new IRSListener(irSensor);
 	
-	// drive motors and arm motor
 	private Motors motors = new Motors();
-
-	// modes
-	private ManualControl mc = new ManualControl(irsl, motors);
+	private ColorSensorArm csa = new ColorSensorArm();
+	
+	private ManualControl mc = new ManualControl(this.irsl, this.motors, this.csa);
 //	private TreasureHunter th = new TreasureHunter();
 //	private RobotDog rd = new RobotDog();
 //	private Jukebox jb = new Jukebox();
 	
-	
-	private boolean isRunning = true;		// tracks if thread is still running
+	/**
+	 * Tracks if main loop of the program is running
+	 */
+	private boolean isRunning = true;
 
+	/**
+	 * Main loop of the program
+	 */
 	public void run() {
 		
 		LCD.drawString("jaska", 4, 3);
+		
 		this.irsl.start();
 		this.motors.motorSync(this.motors.getMotorLeft(), this.motors.getMotorRight());
 		
@@ -40,7 +47,10 @@ public class App {
 				kill();
 			}
 			
-			mc.manualControl();
+			this.mc.manualControl();
+//			this.th.treasureHunter();
+//			this.rd.robotDog();
+//			this.jb.jukebox();
 		}
 		
 		LCD.clear();
@@ -49,7 +59,7 @@ public class App {
 	}
 	
 	/**
-	 * Kills the thread listening to IR controller traffic
+	 * Kills the main loop of the program
 	 */
 	public void kill() {
 		this.isRunning = false;
