@@ -109,10 +109,8 @@ public class IRSListener extends Thread{
 	 */
 	public int checkForTwoButtonCommands(int channel) {
 		
-//		int buttonStillDown;
 		int oneButtonCommand = this.irSensor.getRemoteCommand(channel);
 		
-//		if(channel >= 0) {
 			if(oneButtonCommand != 0) {
 				Delay.msDelay(200);
 				int twoButtonCommand = this.irSensor.getRemoteCommand(channel);
@@ -125,24 +123,5 @@ public class IRSListener extends Thread{
 			} else {
 				return 0;
 			}
-//		} else {
-//			if(oneButtonCommand != 0) {
-//				Delay.msDelay(200);
-//				int twoButtonCommand = this.irSensor.getRemoteCommand(channel);
-//				
-//				if(twoButtonCommand != oneButtonCommand) {
-//					return twoButtonCommand;
-//				} else {
-//					while(true) {
-//						buttonStillDown = this.irSensor.getRemoteCommand(0);
-//						if(!(oneButtonCommand == buttonStillDown)) {
-//							break;
-//						}
-//					}
-//				}
-//			}
-//		}
-		
-//		return -1;
 	}
 }

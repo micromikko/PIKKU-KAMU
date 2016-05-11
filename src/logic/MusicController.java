@@ -19,6 +19,9 @@ public class MusicController extends Thread {
 	private ArrayList<File> playList = new ArrayList<>();
 	Map<File, String> map = new HashMap<File, String>();
 	
+	/**
+	 * Constructor
+	 */
 	public MusicController () {
 		volume = 50;
 //		playSound = true;
@@ -44,10 +47,19 @@ public class MusicController extends Thread {
 		}
 	}
 	
+	/**
+	 * Get current volume
+	 * @return int Returns the current volume (0-100)
+	 */
 	public int getVolume(){
 		return volume;
 	}
 	
+	/**
+	 * Set device volume
+	 * @param a int increase volume by *a* (int 0-100)
+	 * @return int Returns total volume
+	 */
 	public int setVolume(int a){
 		this.volume = volume + a;
 		return volume;
@@ -57,6 +69,9 @@ public class MusicController extends Thread {
 //		playSound = false;
 //	}
 	
+	/**
+	 * Clears playlist and adds 4 sound files to said list
+	 */
 	public void addToPlayList(){
 		playList.clear();
 		playList.add(soundFile1);

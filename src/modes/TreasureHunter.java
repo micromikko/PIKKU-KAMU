@@ -13,22 +13,32 @@ public class TreasureHunter {
 	private IRSListener irsl;
 	private Motors motors;
 	private ColorSensorArm csa;
-	private ColorChecker cs;
+	private ColorChecker cc;
 	
 	private int searchAlgorithm;
 	
-	public TreasureHunter(IRSListener irsl, Motors motors, ColorSensorArm csa, ColorChecker cs) {
+	/**
+	 * Constructor
+	 * @param irsl IRSListener
+	 * @param motors Motors
+	 * @param csa ColorSensorArm
+	 * @param cs ColorChecker
+	 */
+	public TreasureHunter(IRSListener irsl, Motors motors, ColorSensorArm csa, ColorChecker cc) {
 		this.irsl = irsl;
 		this.motors = motors;
 		this.csa = csa;
-		this.cs = cs;
+		this.cc = cc;
 		
 		this.searchAlgorithm = 1;
 	}
 	
+	/**
+	 * Governs the robot's actions when using the IR remote in channel 1
+	 */
 	public void treasureHunter() {
 		
-		int remoteCommand = this.irsl.checkForTwoButtonCommands(0);
+		int remoteCommand = this.irsl.checkForTwoButtonCommands(1);
 		
 		switch(remoteCommand) {
 			case 1:
@@ -55,6 +65,9 @@ public class TreasureHunter {
 		}
 	}
 	
+	/**
+	 * Next pattern (set to work with two patterns atm)
+	 */
 	public void nextPattern() {
 		if(this.searchAlgorithm == 1) {
 			this.searchAlgorithm++;
@@ -63,6 +76,9 @@ public class TreasureHunter {
 		}
 	}
 	
+	/**
+	 * Previous pattern (set to work with two patterns atm)
+	 */
 	public void previousPattern() {
 		if(this.searchAlgorithm == 2) {
 			this.searchAlgorithm--;
@@ -71,6 +87,9 @@ public class TreasureHunter {
 		}
 	}
 	
+	/**
+	 * Start selected search pattern
+	 */
 	public void startPattern() {
 		
 		switch(this.searchAlgorithm) {
@@ -82,6 +101,9 @@ public class TreasureHunter {
 		}
 	}
 	
+	/**
+	 * Spiral search pattern. Starts from "lower left" corner of a rectangle. Combs an marked area for a red X marker.
+	 */
 	public void spiralPattern() {
 		
 		int spiralCounter = 0;
@@ -105,6 +127,9 @@ public class TreasureHunter {
 		party();		
 	}
 	
+	/**
+	 * Stops the bot and raises the ColorSensorArm. Prints a victory message to the screen.
+	 */
 	public void party() {
 		
 		this.motors.stopDriveMotors();
@@ -114,6 +139,11 @@ public class TreasureHunter {
 		
 	}
 	
+	/**
+	 * Increases the collideCounter. 
+	 * @param collideCounter int the amount of "wall" collisions
+	 * @return int If collideCounter is 4, change it to 0.
+	 */
 	public int advanceCollideCounter(int collideCounter) {
 		if(collideCounter < 4) {
 			return (collideCounter++);
@@ -122,6 +152,12 @@ public class TreasureHunter {
 		}
 	}
 	
+	/**
+	 * Increases the collideCounter. 
+	 * @param collideCounter int the amount of "wall" collisions
+	 * @param spiralCounter int spiralCounter tracks the current "layer" of the spiral.
+	 * @return int If collideCounter reaches 4, return spiralCounter + 1
+	 */
 	public int advanceSpiralCounter(int collideCounter, int spiralCounter) {
 		if(collideCounter == 4) {
 			return (spiralCounter++);
@@ -130,22 +166,33 @@ public class TreasureHunter {
 		}
 	}
 	
+	/**
+	 * Checks to see if the treasure (red coloured tape) has been found
+	 * @return boolean True if treasure found, else false
+	 */
 	public boolean treasureFound() {
-		if(this.cs.getCurrentColor() == 0) {
+		if(this.cc.getCurrentColor() == 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
+	/**
+	 * Checks to see if the bot has encountered a "wall" (black coloured tape marking the edges of the search area)
+	 * @return boolean Returns true if the bot detects black, else false
+	 */
 	public boolean hitWall() {
-		if(this.cs.getCurrentColor() == 7) {
+		if(this.cc.getCurrentColor() == 7) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
+	/**
+	 * Stops, prints "BOINK", waits for 500ms, clears screen
+	 */
 	public void stopAndBoink() {
 		this.motors.stopDriveMotors();
 		LCD.drawString("BOINK", 1, 1);
@@ -153,6 +200,10 @@ public class TreasureHunter {
 		LCD.clear();
 	}
 	
+	/**
+	 * The bot reverses spiralCount * 0.1m, turns 90 degrees to the right and starts forward
+	 * @param spiralCount int The "layer" of the spiral.
+	 */
 	public void backTurnAndGo(int spiralCount) {
 		for(int i = 0; i < spiralCount; i++) {
 			this.motors.driveBackward(1000);
@@ -161,11 +212,13 @@ public class TreasureHunter {
 		this.motors.driveForward();
 	}
 	
-	
+	/**
+	 * Combs the search area in a zig-zag pattern until the red coloured tape has been found.
+	 */
 	public void zigZagPattern() {
 		csa.setColorSensorArmSpeed(50); 	//limit arm speed to prevent trouble
 		csa.colorSensorArmDown();			//lower arm to reading position
-		LCD.drawString("" + this.cs.getCurrentColor(), 1, 1);
+		LCD.drawString("" + this.cc.getCurrentColor(), 1, 1);
 		Delay.msDelay(3000);
 		LCD.clear();
 		
@@ -179,7 +232,7 @@ public class TreasureHunter {
 		
 		while(!foundTreasure) {				//search until treasure found
 			
-			if(this.cs.getCurrentColor() == 7) { 	//if we are on a black area
+			if(this.cc.getCurrentColor() == 7) { 	//if we are on a black area
 				//stop, we hit a border of the search area!
 				motors.stopDriveMotors();
 				LCD.drawString("BOINK",1,1);
@@ -206,7 +259,7 @@ public class TreasureHunter {
 						       		   //driving forward
 			}
 			
-			if (this.cs.getCurrentColor() == 0) {
+			if (this.cc.getCurrentColor() == 0) {
 				//we are on a red area, which means we found the treasure!
 				motors.stopDriveMotors();
 				LCD.drawString("Found the treasure!", 1, 1); //declare our findings to the world
