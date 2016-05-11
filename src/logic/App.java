@@ -21,11 +21,11 @@ public class App {
 	
 	private Motors motors = new Motors();
 	private ColorSensorArm csa = new ColorSensorArm();
-	private ColorChecker cs = new ColorChecker(SensorPort.S4);
+	private ColorChecker cc = new ColorChecker(SensorPort.S4);
 	private MusicController muCo = new MusicController();
 	
 	private ManualControl mc = new ManualControl(this.irsl, this.motors, this.csa);
-	private TreasureHunter th = new TreasureHunter(this.irsl, this.motors, this.csa, this.cs);
+	private TreasureHunter th = new TreasureHunter(this.irsl, this.motors, this.csa, this.cc);
 //	private RobotDog rd = new RobotDog();
 	private Jukebox jb = new Jukebox(this.muCo, this.irsl);
 	
@@ -38,6 +38,8 @@ public class App {
 	 * Main loop of the program
 	 */
 	public void run() {
+		
+		this.cc.setDaemon(true);
 		
 		LCD.drawString("Welcome!", 4, 3);
 		Delay.msDelay(1000);
