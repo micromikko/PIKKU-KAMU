@@ -69,6 +69,15 @@ public class Motors {
 		this.motorLeft.setAcceleration(acceleration);
 		this.motorRight.setAcceleration(acceleration);
 	}
+	
+	/**
+	 * Set the speed of the drive motors
+	 * @param speed int Speed is measured in degrees/second (deg/s)
+	 */
+	public void setDriveSpeed(int speed) {
+		this.motorLeft.setSpeed(speed);
+		this.motorRight.setSpeed(speed);
+	}
 
 	/**
 	 * Synchronously drives forward with both drive motors until stopped
