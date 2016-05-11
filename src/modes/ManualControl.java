@@ -18,9 +18,9 @@ public class ManualControl {
 	
 	/**
 	 * Constructor
-	 * @param irsl
-	 * @param importedMotors
-	 * @param csa
+	 * @param irsl IRSListener
+	 * @param importedMotors Motors
+	 * @param csa ColorSensorArm
 	 */
 	public ManualControl(IRSListener irsl, Motors importedMotors, ColorSensorArm csa) {
 		this.irsl = irsl;

@@ -39,7 +39,9 @@ public class App {
 	 */
 	public void run() {
 		
-		LCD.drawString("jaska", 4, 3);
+		LCD.drawString("Welcome!", 4, 3);
+		Delay.msDelay(1000);
+		LCD.clear();
 		
 		this.irsl.start();
 		this.motors.motorSync(this.motors.getMotorLeft(), this.motors.getMotorRight());
