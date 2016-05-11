@@ -15,13 +15,13 @@ public class MusicController extends Thread {
 	final File soundFile3 = new File("Space_Alert2.wav");
 	final File soundFile4 = new File("Space_Alert1.wav");
 	private int volume;
-	private boolean playSound;
+//	private boolean playSound;
 	private ArrayList<File> playList = new ArrayList<>();
 	Map<File, String> map = new HashMap<File, String>();
 	
 	public MusicController () {
 		volume = 50;
-		playSound = true;
+//		playSound = true;
 		/**
 		 * Give a name for each soundFile
 		 */
@@ -53,9 +53,9 @@ public class MusicController extends Thread {
 		return volume;
 	}
 	
-	public void killSound(){
-		playSound = false;
-	}
+//	public void killSound(){
+//		playSound = false;
+//	}
 	
 	public void addToPlayList(){
 		playList.clear();

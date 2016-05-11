@@ -2,25 +2,25 @@ package modes;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.sensor.EV3IRSensor;
 import lejos.utility.Delay;
+import logic.IRSListener;
+import logic.MusicController;
 
 public class Jukebox {
-	private EV3IRSensor irSensor;
+	private IRSListener irls;
 	private MusicController jukebox;
 	
-	public Jukebox(MusicController importedJukebox, EV3IRSensor irSensor){
+	public Jukebox(MusicController importedJukebox, IRSListener irls){
 		this.jukebox = importedJukebox;
-		this.irSensor = irSensor;
-		musicControl();
+		this.irls = irls;
 	}
 	/**
 	 * Get remoteCommand from the IRSensor
 	 */
-	public void musicControl(){
+	public void jukebox(){
 		while(!Button.ESCAPE.isDown()){
 			int i = 0;
-			int remoteCommand = irSensor.getRemoteCommand(3);
+			int remoteCommand = irls.checkForTwoButtonCommands(3);
 			switch(remoteCommand) {
 				case 1:
 					LCD.clear();
@@ -42,7 +42,7 @@ public class Jukebox {
 						/**
 						 * Specify the song to be removed based on their location on the list
 						 */
-						remoteCommand = irSensor.getRemoteCommand(3);
+						remoteCommand = irls.checkForTwoButtonCommands(3);
 						if(remoteCommand==1){
 							LCD.clear();
 							i++;
