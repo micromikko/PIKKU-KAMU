@@ -47,20 +47,9 @@ public class TreasureHunter {
 			case 2:
 				previousPattern();
 				break;
-			case 3:
-				// STOPS AND RESETS ALL SEARCHING
-				break;
 			case 4:
 				nextPattern();
 				break;
-			case 6:
-				
-				break;
-			case 7:
-				
-				break;
-			case 8:
-				
 			default:
 		}
 	}
@@ -108,12 +97,18 @@ public class TreasureHunter {
 		
 		int spiralCounter = 0;
 		int collideCounter = 0;
+		boolean treasureFound = false;
 		
 		this.motors.setDriveSpeed(500);
 		this.csa.colorSensorArmDown();
 		
-		while(!treasureFound()) {
+		while(!treasureFound) {
 			
+			if(this.irsl.checkForTwoButtonCommands(1) == 3) {
+				break;
+			}
+			
+			treasureFound = treasureFound();
 			if(hitWall()) {
 				collideCounter = advanceCollideCounter(collideCounter);
 				spiralCounter = advanceSpiralCounter(collideCounter, spiralCounter);
@@ -124,7 +119,14 @@ public class TreasureHunter {
 			}
 		}
 		
-		party();		
+		if(treasureFound) {
+			party();
+		} else {
+			LCD.clear(3);
+			LCD.drawString("Exiting search pattern", 0, 3);
+			Delay.msDelay(2000);
+			LCD.clear(3);
+		}
 	}
 	
 	/**
@@ -135,7 +137,8 @@ public class TreasureHunter {
 		this.motors.stopDriveMotors();
 		this.csa.colorSensorArmUp();
 		
-		LCD.drawString("Treasure found! PARTY!", 1, 1);
+		LCD.clear(3);
+		LCD.drawString("Treasure found! PARTY!", 1, 3);
 		
 	}
 	
@@ -195,9 +198,10 @@ public class TreasureHunter {
 	 */
 	public void stopAndBoink() {
 		this.motors.stopDriveMotors();
-		LCD.drawString("BOINK", 1, 1);
+		LCD.clear(3);
+		LCD.drawString("BOINK", 1, 3);
 		Delay.msDelay(500);
-		LCD.clear();
+		LCD.clear(3);
 	}
 	
 	/**
@@ -218,9 +222,8 @@ public class TreasureHunter {
 	public void zigZagPattern() {
 		csa.setColorSensorArmSpeed(50); 	//limit arm speed to prevent trouble
 		csa.colorSensorArmDown();			//lower arm to reading position
-		LCD.drawString("" + this.cc.getCurrentColor(), 1, 1);
 		Delay.msDelay(3000);
-		LCD.clear();
+		LCD.clear(3);
 		
 		motors.setDriveAcceleration(50);
 		
@@ -232,11 +235,17 @@ public class TreasureHunter {
 		
 		while(!foundTreasure) {				//search until treasure found
 			
+			if(this.irsl.checkForTwoButtonCommands(1) == 3) {
+				break;
+			}
+			
 			if(this.cc.getCurrentColor() == 7) { 	//if we are on a black area
 				//stop, we hit a border of the search area!
 				motors.stopDriveMotors();
-				LCD.drawString("BOINK",1,1);
+				LCD.clear(3);
+				LCD.drawString("BOINK",1,3);
 				Delay.msDelay(2000);
+				LCD.clear(3);
 				
 				if(collideCounter % 2 == 0) {
 					//check if we have to make a right turn...
@@ -262,16 +271,17 @@ public class TreasureHunter {
 			if (this.cc.getCurrentColor() == 0) {
 				//we are on a red area, which means we found the treasure!
 				motors.stopDriveMotors();
-				LCD.drawString("Found the treasure!", 1, 1); //declare our findings to the world
+				LCD.clear(3);
+				LCD.drawString("Found the treasure!", 1, 3); //declare our findings to the world
 				
 				Delay.msDelay(3000);
+				LCD.clear(3);
 				foundTreasure = true;
 				
 			}
 		}
 	}
 }
-
 
 /*
 1 TOP-LEFT
