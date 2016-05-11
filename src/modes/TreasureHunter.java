@@ -14,14 +14,15 @@ public class TreasureHunter {
 	private IRSListener irsl;
 	private Motors motors;
 	private ColorSensorArm csa;
-	private ColorChecker colorC = new ColorChecker(SensorPort.S4);
+	private ColorChecker cs;
 	
 	private int searchAlgorithm;
 	
-	public TreasureHunter(IRSListener irsl, Motors motors, ColorSensorArm csa) {
+	public TreasureHunter(IRSListener irsl, Motors motors, ColorSensorArm csa, ColorChecker cs) {
 		this.irsl = irsl;
 		this.motors = motors;
 		this.csa = csa;
+		this.cs = cs;
 		
 		this.searchAlgorithm = 1;
 	}
@@ -32,16 +33,16 @@ public class TreasureHunter {
 		
 		switch(remoteCommand) {
 			case 1:
-				// START SELECTED SEARCH PATTERN
+				startPattern();
 				break;
 			case 2:
-				previousAlgorithm();
+				previousPattern();
 				break;
 			case 3:
 				// STOPS AND RESETS ALL SEARCHING
 				break;
 			case 4:
-				nextAlgorithm();
+				nextPattern();
 				break;
 			case 6:
 				
@@ -55,35 +56,117 @@ public class TreasureHunter {
 		}
 	}
 	
-	public void nextAlgorithm() {
-		this.searchAlgorithm++;
+	public void nextPattern() {
+		if(this.searchAlgorithm == 1) {
+			this.searchAlgorithm++;
+		} else {
+			this.searchAlgorithm = 1;
+		}
 	}
 	
-	public void previousAlgorithm() {
-		this.searchAlgorithm--;
+	public void previousPattern() {
+		if(this.searchAlgorithm == 2) {
+			this.searchAlgorithm--;
+		} else {
+			this.searchAlgorithm = 2;
+		}
 	}
 	
-	public int getSearchAlgorithm() {
-		return this.searchAlgorithm;
-	}
-	
-	public void startAlgorithm() {
+	public void startPattern() {
 		
 		switch(this.searchAlgorithm) {
 		case 1:
 			spiralPattern();
 			break;
+		case 2:
+			zigZagPattern();
 		}
 	}
 	
 	public void spiralPattern() {
 		
+		int spiralCounter = 0;
+		int collideCounter = 0;
+		
+		this.motors.setDriveSpeed(500);
+		this.csa.colorSensorArmDown();
+		
+		while(!treasureFound()) {
+			
+			if(hitWall()) {
+				collideCounter = advanceCollideCounter(collideCounter);
+				spiralCounter = advanceSpiralCounter(collideCounter, spiralCounter);
+				
+				stopAndBoink();
+				
+				backTurnAndGo(spiralCounter);
+			}
+		}
+		
+		party();		
 	}
+	
+	public void party() {
+		
+		this.motors.stopDriveMotors();
+		this.csa.colorSensorArmUp();
+		
+		LCD.drawString("Treasure found! PARTY!", 1, 1);
+		
+	}
+	
+	public int advanceCollideCounter(int collideCounter) {
+		if(collideCounter < 4) {
+			return (collideCounter++);
+		} else {
+			return 0;
+		}
+	}
+	
+	public int advanceSpiralCounter(int collideCounter, int spiralCounter) {
+		if(collideCounter == 4) {
+			return (spiralCounter++);
+		} else {
+			return spiralCounter;
+		}
+	}
+	
+	public boolean treasureFound() {
+		if(this.cs.getCurrentColor() == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean hitWall() {
+		if(this.cs.getCurrentColor() == 7) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void stopAndBoink() {
+		this.motors.stopDriveMotors();
+		LCD.drawString("BOINK", 1, 1);
+		Delay.msDelay(500);
+		LCD.clear();
+	}
+	
+	public void backTurnAndGo(int spiralCount) {
+		for(int i = 0; i < spiralCount; i++) {
+			this.motors.driveBackward(1000);
+		}
+		this.motors.turnRight(90);
+		this.motors.driveForward();
+	}
+	
 	
 	public void zigZagPattern() {
 		csa.setColorSensorArmSpeed(50); 	//limit arm speed to prevent trouble
 		csa.colorSensorArmDown();			//lower arm to reading position
-		LCD.drawString("" + colorC.getCurrentColor(), 1, 1);
+		LCD.drawString("" + this.cs.getCurrentColor(), 1, 1);
 		Delay.msDelay(3000);
 		LCD.clear();
 		
@@ -97,7 +180,7 @@ public class TreasureHunter {
 		
 		while(!foundTreasure) {				//search until treasure found
 			
-			if(colorC.getCurrentColor() == 7) { 	//if we are on a black area
+			if(this.cs.getCurrentColor() == 7) { 	//if we are on a black area
 				//stop, we hit a border of the search area!
 				motors.stopDriveMotors();
 				LCD.drawString("BOINK",1,1);
@@ -124,7 +207,7 @@ public class TreasureHunter {
 						       		   //driving forward
 			}
 			
-			if (colorC.getCurrentColor() == 0) {
+			if (this.cs.getCurrentColor() == 0) {
 				//we are on a red area, which means we found the treasure!
 				motors.stopDriveMotors();
 				LCD.drawString("Found the treasure!", 1, 1); //declare our findings to the world
