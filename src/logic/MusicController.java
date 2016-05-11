@@ -1,32 +1,27 @@
 package logic;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.sensor.EV3IRSensor;
-
+import lejos.utility.Delay;
 
 public class MusicController extends Thread {
-	
 	final File soundFile1 = new File("Space_Alert3.wav");
 	final File soundFile2 = new File("laaseri.wav");
 	final File soundFile3 = new File("Space_Alert2.wav");
 	final File soundFile4 = new File("Space_Alert1.wav");
-	private EV3IRSensor irSensor;
-	private int soundNumber;
+	//private int soundNumber;
 	private int volume;
 	private boolean playSound;
 	private ArrayList<File> playList = new ArrayList<>();
 	Map<File, String> map = new HashMap<File, String>();
 	
-	/**
-	 * Constructor
-	 */
 	public MusicController () {
-		soundNumber = 0;
+		//soundNumber = 0;
 		volume = 50;
 		playSound = true;
 		map.put(soundFile1, "Space Alert 3");
@@ -36,12 +31,12 @@ public class MusicController extends Thread {
 	}
 	
 	public void jaska() {
-		/*for (File J : playList){
+		for (File J : playList){
 			LCD.clear();
 			LCD.drawString(map.get(J), 0, 0);
 			Sound.playSample(J, volume);
 			Delay.msDelay(5000);
-		}*/
+		}
 	}
 	
 	public void musicPlay() {
@@ -67,29 +62,22 @@ public class MusicController extends Thread {
 	}
 	
 	public void addToPlayList(){
+		playList.clear();
 		playList.add(soundFile1);
 		playList.add(soundFile2);
 		playList.add(soundFile3);
 		playList.add(soundFile4);
 	}
 	
-	/*public void removeFromPlayList(){
-		int remoteCommand = irSensor.getRemoteCommand(0);
-		int a = 0;
+	public void removeFromPlayList(int removeSong){
 		int i = 0;
-	    while(remoteCommand !=3){
-	    	if(remoteCommand == 1){
-	    		a++;
-	    	}
-	    	Delay.msDelay(500);
-	    }
 		for (File J : playList){
 			i++;
-			if(i==a){
+			if(i==removeSong){
 				playList.remove(J);
 			}
 		}
-	}*/
+	}
 	
 	public void searchPlayList(){
 		LCD.clear();
@@ -98,6 +86,5 @@ public class MusicController extends Thread {
 			LCD.drawString(map.get(J) + i, 0, i);
 			i++;
 		}
-		
 	}
 }
