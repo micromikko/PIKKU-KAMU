@@ -7,18 +7,20 @@ import logic.IRSListener;
 import logic.MusicController;
 
 public class Jukebox {
-	private IRSListener irsl;
+	private IRSListener irls;
 	private MusicController jukebox;
 	
-	public Jukebox(MusicController importedJukebox, IRSListener irsl){
+	public Jukebox(MusicController importedJukebox, IRSListener irls){
 		this.jukebox = importedJukebox;
-		this.irsl = irsl;
+		this.irls = irls;
 	}
-		
+	/**
+	 * Get remoteCommand from the IRSensor
+	 */
 	public void jukebox(){
 		while(!Button.ESCAPE.isDown()){
 			int i = 0;
-			int remoteCommand = this.irsl.checkForTwoButtonCommands(3);
+			int remoteCommand = irls.checkForTwoButtonCommands(3);
 			switch(remoteCommand) {
 				case 1:
 					LCD.clear();
@@ -37,7 +39,10 @@ public class Jukebox {
 				case 4:
 					while(true)
 					{
-						remoteCommand = this.irsl.checkForTwoButtonCommands(3);
+						/**
+						 * Specify the song to be removed based on their location on the list
+						 */
+						remoteCommand = irls.checkForTwoButtonCommands(3);
 						if(remoteCommand==1){
 							LCD.clear();
 							i++;
@@ -58,8 +63,7 @@ public class Jukebox {
 					break;
 				case 5:
 					LCD.clear();
-					jukebox.jaska();
-					//LCD.drawInt(4, 0, 0);
+					jukebox.musicPlay();
 					break;
 				case 8:
 					LCD.clear();
