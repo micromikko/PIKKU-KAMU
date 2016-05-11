@@ -1,7 +1,6 @@
 package logic;
 
 import lejos.hardware.port.Port;
-import lejos.hardware.Button;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 
@@ -9,7 +8,6 @@ public class ColorChecker extends Thread {
 	
 	private EV3ColorSensor mySensor;
 	private int myColor;
-	private boolean isRunning;
 
 	/**
 	 * Contructor
@@ -22,15 +20,8 @@ public class ColorChecker extends Thread {
 	/**
 	 * Creates a thread that continuously reads the current color
 	 */
-	public void run() {
-		this.isRunning = true;
-		
-		while (this.isRunning) {
-			
-			if (Button.DOWN.isDown()) {
-				this.isRunning = false;
-			}
-			
+	public void run() {		
+		while (true) {
 			this.myColor = this.mySensor.getColorID();
 		}
 	}

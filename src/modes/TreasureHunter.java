@@ -22,7 +22,7 @@ public class TreasureHunter {
 	 * @param irsl IRSListener
 	 * @param motors Motors
 	 * @param csa ColorSensorArm
-	 * @param cs ColorChecker
+	 * @param cc ColorChecker
 	 */
 	public TreasureHunter(IRSListener irsl, Motors motors, ColorSensorArm csa, ColorChecker cc) {
 		this.irsl = irsl;
