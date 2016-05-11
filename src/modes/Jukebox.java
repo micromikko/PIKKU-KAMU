@@ -14,7 +14,9 @@ public class Jukebox {
 		this.irSensor = irSensor;
 		musicControl();
 	}
-		
+	/**
+	 * Get remoteCommand from the IRSensor
+	 */
 	public void musicControl(){
 		while(!Button.ESCAPE.isDown()){
 			int i = 0;
@@ -37,6 +39,9 @@ public class Jukebox {
 				case 4:
 					while(true)
 					{
+						/**
+						 * Specify the song to be removed based on their location on the list
+						 */
 						remoteCommand = irSensor.getRemoteCommand(3);
 						if(remoteCommand==1){
 							LCD.clear();
@@ -58,8 +63,7 @@ public class Jukebox {
 					break;
 				case 5:
 					LCD.clear();
-					jukebox.jaska();
-					//LCD.drawInt(4, 0, 0);
+					jukebox.musicPlay();
 					break;
 				case 8:
 					LCD.clear();
