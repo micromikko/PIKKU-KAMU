@@ -1,7 +1,6 @@
 package modes;
 
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.port.*;
 import lejos.utility.Delay;
 import logic.ColorSensorArm;
 import logic.ColorChecker;

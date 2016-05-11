@@ -11,6 +11,7 @@ import lejos.hardware.lcd.*;
 import logic.Motors;
 import logic.IRSListener;
 import logic.ColorChecker;
+import logic.ColorSensorArm;
 import test.ZigZagSearchTest;
 
 public class ArmTest {
@@ -18,8 +19,9 @@ public class ArmTest {
 	public static void main(String[] args) {
 		
 		Motors motors = new Motors();
+		ColorSensorArm cs = new ColorSensorArm();
 		ColorChecker colorChecker = new ColorChecker(SensorPort.S4);
-		motors.setColorSensorArmSpeed(100);
+		cs.setColorSensorArmSpeed(100);
 		
 		
 		

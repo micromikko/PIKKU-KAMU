@@ -5,7 +5,9 @@ import lejos.hardware.lcd.LCD;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3IRSensor;
 import lejos.utility.Delay;
+import modes.Jukebox;
 import modes.ManualControl;
+import modes.TreasureHunter;
 
 /**
  * 
@@ -19,11 +21,13 @@ public class App {
 	
 	private Motors motors = new Motors();
 	private ColorSensorArm csa = new ColorSensorArm();
+	private ColorChecker cs = new ColorChecker(SensorPort.S4);
+	private MusicController muCo = new MusicController();
 	
 	private ManualControl mc = new ManualControl(this.irsl, this.motors, this.csa);
-//	private TreasureHunter th = new TreasureHunter();
+	private TreasureHunter th = new TreasureHunter(this.irsl, this.motors, this.csa, this.cs);
 //	private RobotDog rd = new RobotDog();
-//	private Jukebox jb = new Jukebox();
+	private Jukebox jb = new Jukebox(this.muCo, this.irsl);
 	
 	/**
 	 * Tracks if main loop of the program is running
@@ -48,14 +52,14 @@ public class App {
 			}
 			
 			this.mc.manualControl();
-//			this.th.treasureHunter();
+			this.th.treasureHunter();
 //			this.rd.robotDog();
-//			this.jb.jukebox();
+			this.jb.jukebox();
 		}
 		
 		LCD.clear();
-		LCD.drawString("seon moro", 2, 3);
-		Delay.msDelay(500);
+		LCD.drawString("Goodbye", 3, 3);
+		Delay.msDelay(2000);
 	}
 	
 	/**
