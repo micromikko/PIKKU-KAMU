@@ -33,4 +33,11 @@ public class ColorChecker extends Thread {
 	public int getCurrentColor() {
 		return this.myColor;
 	}
+	
+	/**
+	 * Closes the ColorSensor
+	 */
+	public void closeColorSensor() {
+		this.mySensor.close();
+	}
 }

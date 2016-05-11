@@ -15,7 +15,7 @@ public class TreasureHunter {
 	private ColorSensorArm csa;
 	private ColorChecker cc;
 	
-	private int searchAlgorithm;
+	private int searchPattern;
 	
 	/**
 	 * Constructor
@@ -30,7 +30,7 @@ public class TreasureHunter {
 		this.csa = csa;
 		this.cc = cc;
 		
-		this.searchAlgorithm = 1;
+		this.searchPattern = 1;
 	}
 	
 	/**
@@ -58,10 +58,10 @@ public class TreasureHunter {
 	 * Next pattern (set to work with two patterns atm)
 	 */
 	public void nextPattern() {
-		if(this.searchAlgorithm == 1) {
-			this.searchAlgorithm++;
+		if(this.searchPattern == 1) {
+			this.searchPattern++;
 		} else {
-			this.searchAlgorithm = 1;
+			this.searchPattern = 1;
 		}
 	}
 	
@@ -69,10 +69,10 @@ public class TreasureHunter {
 	 * Previous pattern (set to work with two patterns atm)
 	 */
 	public void previousPattern() {
-		if(this.searchAlgorithm == 2) {
-			this.searchAlgorithm--;
+		if(this.searchPattern == 2) {
+			this.searchPattern--;
 		} else {
-			this.searchAlgorithm = 2;
+			this.searchPattern = 2;
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class TreasureHunter {
 	 */
 	public void startPattern() {
 		
-		switch(this.searchAlgorithm) {
+		switch(this.searchPattern) {
 		case 1:
 			spiralPattern();
 			break;

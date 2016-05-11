@@ -10,10 +10,10 @@ import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
 
 public class MusicController extends Thread {
-	final File soundFile1 = new File("Space_Alert3.wav");
-	final File soundFile2 = new File("laaseri.wav");
-	final File soundFile3 = new File("Space_Alert2.wav");
-	final File soundFile4 = new File("Space_Alert1.wav");
+	private final File soundFile1 = new File("Space_Alert3.wav");
+	private final File soundFile2 = new File("laaseri.wav");
+	private final File soundFile3 = new File("Space_Alert2.wav");
+	private final File soundFile4 = new File("Space_Alert1.wav");
 	private int volume;
 //	private boolean playSound;
 	private ArrayList<File> playList = new ArrayList<>();

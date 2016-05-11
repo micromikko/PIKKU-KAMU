@@ -40,14 +40,15 @@ public class App {
 	public void run() {
 		
 		this.cc.setDaemon(true);
+		this.cc.start();
+		this.irsl.start();
 		
+		this.motors.motorSync(this.motors.getMotorLeft(), this.motors.getMotorRight());
+
 		LCD.drawString("Welcome!", 4, 3);
 		Delay.msDelay(1000);
 		LCD.clear();
-		
-		this.irsl.start();
-		this.motors.motorSync(this.motors.getMotorLeft(), this.motors.getMotorRight());
-		
+				
 		while(this.isRunning) {
 			
 			if(Button.ESCAPE.isDown()) {
@@ -60,6 +61,11 @@ public class App {
 //			this.rd.robotDog();
 			this.jb.jukebox();
 		}
+		
+		this.irsl.kill();
+		this.motors.closeDriveMotors();
+		this.csa.closeColorSensorArmMotor();
+		this.cc.closeColorSensor();
 		
 		LCD.clear();
 		LCD.drawString("Goodbye", 3, 3);
